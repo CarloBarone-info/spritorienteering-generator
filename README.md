@@ -37,3 +37,19 @@ The team capacities are balanced (sizes differ by at most one) and the default a
 - `src/lib/assignments.js` — import, roster, team distribution, CSV and Excel sheet data
 - `src/App.css` / `src/index.css` — styling
 - `test/team-utils.test.js` — logic tests
+
+## Publish to GitHub Pages
+
+The repository contains an automated deployment workflow at
+`.github/workflows/deploy-pages.yml`.
+
+1. Open **Settings > Pages** for this repository.
+2. Under **Build and deployment**, select **GitHub Actions** as the source.
+3. Open **Actions > Deploy React app to GitHub Pages** and use **Run workflow**
+   (or **Re-run jobs** if the deployment ran before Pages was enabled).
+4. When the workflow succeeds, open:
+   https://carlobarone-info.github.io/spritorienteering-generator/
+
+Subsequent pushes to `main` will automatically rebuild and deploy the site.
+The deployment sets `GITHUB_PAGES=true` at build time so Vite uses the correct
+repository subpath while local development stays at `http://localhost:5173/`.
