@@ -1,0 +1,200 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-header, .site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-header {
+  height: 80px;
+  padding: 0 max(32px, calc((100vw - 1120px) / 2));
+  border-bottom: 1px solid #e5e9e2;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #164f3f;
+  color: white;
+  font-size: 27px;
+  font-weight: 400;
+}
+
+.brand-light { font-weight: 450; }
+.header-tag {
+  border: 1px solid #d8e1d9;
+  border-radius: 999px;
+  padding: 7px 11px;
+  color: #4c6c60;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.main-content {
+  width: min(100% - 64px, 980px);
+  margin: 0 auto;
+  flex: 1;
+}
+
+.hero {
+  padding: 88px 0 58px;
+  max-width: 690px;
+}
+
+.eyebrow, .section-kicker {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #4d7962;
+}
+
+.eyebrow { display: flex; align-items: center; gap: 9px; }
+.eyebrow-dot, .status-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3b9a6a;
+}
+
+.hero h1 {
+  margin: 18px 0 18px;
+  font-size: clamp(42px, 6.2vw, 70px);
+  line-height: 1.08;
+  font-weight: 750;
+  letter-spacing: -0.055em;
+}
+
+.hero h1 em { font-style: normal; color: #3e906a; }
+
+.hero p {
+  max-width: 570px;
+  margin: 0;
+  color: #64766f;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.workspace {
+  overflow: hidden;
+  border: 1px solid #dfe7dc;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 15px 50px rgba(18, 54, 38, 0.035);
+}
+
+.workspace-header {
+  padding: 26px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid #edf0e9;
+}
+
+.workspace-header h2 { font-size: 23px; letter-spacing: -0.04em; margin: 5px 0 0; }
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #47735e;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.workspace-body {
+  min-height: 310px;
+  padding: 52px 24px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background-image: radial-gradient(#dde8dc 0.7px, transparent 0.7px);
+  background-size: 22px 22px;
+}
+
+.compass-icon {
+  width: 62px;
+  height: 62px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #d8e7d7;
+  border-radius: 19px;
+  background: #edf6eb;
+  color: #3a815e;
+  font-size: 35px;
+}
+
+.workspace-body h3 {
+  margin: 23px 0 9px;
+  font-size: 21px;
+  letter-spacing: -0.035em;
+}
+
+.workspace-body p {
+  max-width: 440px;
+  margin: 0;
+  color: #738279;
+  line-height: 1.65;
+  font-size: 14px;
+}
+
+.roadmap {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 55px;
+  padding: 75px 0 100px;
+}
+
+.roadmap-intro h2 {
+  margin: 9px 0 0;
+  font-size: 29px;
+  line-height: 1.22;
+  letter-spacing: -0.045em;
+}
+
+.steps { padding: 0; margin: 0; list-style: none; }
+.step { display: flex; gap: 19px; padding: 0 0 20px; }
+.step + .step { border-top: 1px solid #e2e8de; padding-top: 20px; }
+.step-number { color: #6caa8a; font-size: 13px; font-weight: 800; }
+.step h3 { margin: 0 0 5px; font-size: 15px; }
+.step p { margin: 0; color: #738279; font-size: 13px; line-height: 1.6; }
+
+.site-footer {
+  padding: 24px max(32px, calc((100vw - 1120px) / 2));
+  border-top: 1px solid #e5e9e2;
+  font-size: 12px;
+  color: #7a8b81;
+}
+
+@media (max-width: 700px) {
+  .site-header { height: 70px; padding: 0 20px; }
+  .brand { font-size: 13px; }
+  .brand-light { display: none; }
+  .main-content { width: min(100% - 40px, 980px); }
+  .hero { padding: 64px 0 44px; }
+  .hero p { font-size: 15px; }
+  .workspace-header { padding: 22px; align-items: flex-start; flex-direction: column; }
+  .workspace-body { min-height: 270px; }
+  .roadmap { grid-template-columns: 1fr; gap: 28px; padding: 55px 0 70px; }
+  .site-footer { padding: 24px 20px; gap: 10px; flex-wrap: wrap; }
+}
