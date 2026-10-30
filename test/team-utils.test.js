@@ -69,3 +69,44 @@ test('CSV export quotes values safely', () => {
   participants[0].teamIndex = 0
   assert.deepEqual(exportRows(participants, ['Trailblazers'])[1], ['Trailblazers', 'Orchestra 1', 'Ada'])
 })
+
+test('fully random mode balances team sizes, but ignores orchestra membership', () => {
+  const { participants } = rosterFromRows(parseDelimited(csv))
+  const alternateOrchestras = participants.map((person, i) => ({
+    ...person,
+    orchestraId: 'entirely-different-' + (i % 3),
+  }))
+  const deterministicRandom = () => 0.25
+  const randomTeams = assignRandomly(participants, 3, false, deterministicRandom, false)
+  const renamedTeams = assignRandomly(alternateOrchestras, 3, false, deterministicRandom, false)
+  assert.deepEqual(
+    randomTeams.map((person) => person.teamIndex),
+    renamedTeams.map((person) => person.teamIndex),
+  )
+  assert.deepEqual(
+    [0, 1, 2].map((i) => randomTeams.filter((person) => person.teamIndex === i).length),
+    [4, 3, 3],
+  )
+})
+
+test('fully random mode respects manual locks during fill and reshuffle', () => {
+  const { participants } = rosterFromRows(parseDelimited(csv))
+  participants[0].teamIndex = 0
+  participants[0].locked = true
+  participants[1].teamIndex = 1
+  participants[1].locked = false
+  const filled = assignRandomly(participants, 3, false, () => 0.4, false)
+  assert.equal(filled[0].teamIndex, 0)
+  assert.equal(filled[0].locked, true)
+  assert.equal(filled[1].teamIndex, 1)
+  assert.equal(filled.filter((p) => p.teamIndex !== null).length, 10)
+  const reshuffled = assignRandomly(filled, 3, true, () => 0.6, false)
+  assert.equal(reshuffled[0].teamIndex, 0)
+  assert.equal(reshuffled[0].locked, true)
+  assert.equal(reshuffled.filter((p) => p.teamIndex !== null).length, 10)
+  assert.deepEqual(
+    [0, 1, 2].map((i) => reshuffled.filter((p) => p.teamIndex === i).length),
+    [4, 3, 3],
+  )
+})
+

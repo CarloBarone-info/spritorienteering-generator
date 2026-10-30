@@ -116,7 +116,7 @@ function shuffle(items, random) {
   return result
 }
 
-export function assignRandomly(participants, teamCount, reshuffle = false, random = Math.random) {
+export function assignRandomly(participants, teamCount, reshuffle = false, random = Math.random, balanceOrchestras = true) {
   const prepared = participants.map((person) => {
     if (reshuffle && person.included && !person.locked) {
       return { ...person, teamIndex: null }
@@ -139,6 +139,24 @@ export function assignRandomly(participants, teamCount, reshuffle = false, rando
     )
   })
 
+  if (!balanceOrchestras) {
+    // Draw uniformly from the remaining team slots, without considering orchestra.
+    // Manual assignments and existing allocations have already claimed their slots.
+    const slots = capacities.flatMap((capacity, team) =>
+      Array.from({ length: capacity - counts[team] }, () => team),
+    )
+    const shuffledSlots = shuffle(slots, random)
+    let nextSlot = 0
+    result.forEach((person, index) => {
+      if (person.included && person.teamIndex === null) {
+        result[index] = { ...person, teamIndex: shuffledSlots[nextSlot], locked: false }
+        nextSlot += 1
+      }
+    })
+    return result
+  }
+
+  // Default mode: prefer spreading each orchestra across as many teams as possible.
   const groups = new Map()
   result.forEach((person, index) => {
     if (!person.included || person.teamIndex !== null) return

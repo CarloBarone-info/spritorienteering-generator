@@ -41,6 +41,7 @@ function App() {
   const [participants, setParticipants] = useState([])
   const [orchestras, setOrchestras] = useState([])
   const [teamNames, setTeamNames] = useState(makeTeamNames(4))
+  const [balanceOrchestras, setBalanceOrchestras] = useState(true)
   const [sourceName, setSourceName] = useState('')
   const [search, setSearch] = useState('')
   const [totalDraft, setTotalDraft] = useState(null)
@@ -154,7 +155,7 @@ function App() {
   }
 
   function fillRemaining(reshuffle = false) {
-    setParticipants((previous) => assignRandomly(previous, teamCount, reshuffle))
+    setParticipants((previous) => assignRandomly(previous, teamCount, reshuffle, Math.random, balanceOrchestras))
     setError('')
     setNotice(reshuffle
       ? 'Random assignments reshuffled. Manual assignments were preserved.'
@@ -319,6 +320,30 @@ function App() {
                 onClick={exportCsv}>Export CSV ↗</button>
             </div>
           </div>
+
+          <fieldset className="distribution-settings">
+            <legend>Random assignment style</legend>
+            <div className="distribution-options">
+              <label className={'distribution-option' + (balanceOrchestras ? ' selected' : '')}>
+                <input type="radio" name="assignment-style" checked={balanceOrchestras}
+                  onChange={() => { setBalanceOrchestras(true); setNotice('') }} />
+                <span>
+                  <strong>Mix orchestras evenly</strong>
+                  <small>Spread each orchestra across teams as evenly as possible.</small>
+                </span>
+              </label>
+              <label className={'distribution-option' + (!balanceOrchestras ? ' selected' : '')}>
+                <input type="radio" name="assignment-style" checked={!balanceOrchestras}
+                  onChange={() => { setBalanceOrchestras(false); setNotice('') }} />
+                <span>
+                  <strong>Fully random</strong>
+                  <small>Ignore orchestra membership when assigning people to teams.</small>
+                </span>
+              </label>
+            </div>
+            <p>Both styles keep team sizes balanced and respect manual assignments.
+              Changing the style applies when you click Fill unassigned or Reshuffle unlocked.</p>
+          </fieldset>
 
           <div className="progress-info">
             <span><strong>{assigned}</strong> of {total} participants assigned</span>

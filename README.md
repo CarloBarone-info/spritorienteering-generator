@@ -25,10 +25,11 @@ Columns may have different lengths. Empty cells are skipped. Sample data is in `
 2. Adjust how many imported participants are included. The roster table lets you include or exclude specific people.
 3. Set number of teams OR target team size. The other field is calculated automatically.
 4. Rename teams and choose participants' teams manually (manual choices are locked).
-5. Use **Fill unassigned** to allocate only unassigned people, or **Reshuffle unlocked** to recalculate automated allocations without changing manually locked people.
-6. Export assigned teams to a UTF-8 CSV file.
+5. Choose **Mix orchestras evenly** (default) to spread members from each orchestra across teams, or **Fully random** to ignore orchestra membership. Both options keep team sizes even.
+6. Use **Fill unassigned** to allocate only unassigned people, or **Reshuffle unlocked** to recalculate automated allocations without changing manually locked people. Switching assignment style does not move anyone until you fill or reshuffle.
+7. Export assigned teams to a UTF-8 CSV file.
 
-The team capacities are balanced (sizes differ by at most one) and random assignment attempts to spread each orchestra across teams evenly. If a team count or inclusion change makes a team overfull, some assignments may be cleared, prioritizing preservation of manual choices. No data is uploaded to a server; processing happens in the browser, and edits are not saved across refreshes.
+The team capacities are balanced (sizes differ by at most one) and the default assignment style attempts to spread each orchestra across teams evenly. The fully random style ignores orchestra membership. If a team count or inclusion change makes a team overfull, some assignments may be cleared, prioritizing preservation of manual choices. No data is uploaded to a server; processing happens in the browser, and edits are not saved across refreshes.
 
 ## Files
 

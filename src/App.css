@@ -243,6 +243,32 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
 .button-secondary, .button-export { background: #eff6ef; color: #2a6a47; border: 1px solid #d3e5d6; }
 .button-quiet { background: #fff; color: #677e6c; border: 1px solid #e0e8df; }
 
+.distribution-settings {
+  border: 0;
+  border-top: 1px solid #e7ede6;
+  padding: 23px 0 0;
+  margin: 25px 0 0;
+  min-width: 0;
+}
+.distribution-settings legend { padding: 0 12px 0 0; font-size: 14px; font-weight: 800; }
+.distribution-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 10px; }
+.distribution-option {
+  border: 1px solid #e0e8df;
+  border-radius: 12px;
+  padding: 17px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.distribution-option:hover { background: #f7faf5; }
+.distribution-option.selected { background: #f1f8f1; border-color: #7db795; }
+.distribution-option input { accent-color: #287a54; margin: 3px 0 0; flex-shrink: 0; width: 16px; height: 16px; }
+.distribution-option span { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.distribution-option strong { font-size: 13px; color: #2c4b36; }
+.distribution-option small { color: #718677; font-size: 12px; line-height: 1.5; }
+.distribution-settings > p { font-size: 12px; color: #829184; line-height: 1.5; margin: 12px 0 0; }
 .progress-info { margin-top: 27px; display: flex; justify-content: space-between; gap: 16px; color: #6d8474; font-size: 12px; }
 .progress-info strong { color: #325f43; }
 .progress-track { background: #eaf2e9; border-radius: 100px; height: 7px; margin-top: 10px; overflow: hidden; }
@@ -306,6 +332,7 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
   .field-grid .number-field:first-child { grid-column: 1 / -1; }
   .team-name-grid { grid-template-columns: 1fr; }
   .teams-grid { grid-template-columns: 1fr; }
+  .distribution-options { grid-template-columns: 1fr; }
   .roster-heading { align-items: stretch; flex-direction: column; }
   .search-input { width: 100%; }
   .action-row button { flex: 1 1 auto; }
