@@ -27,13 +27,13 @@ Columns may have different lengths. Empty cells are skipped. Sample data is in `
 4. Rename teams and choose participants' teams manually (manual choices are locked).
 5. Choose **Mix orchestras evenly** (default) to spread members from each orchestra across teams, or **Fully random** to ignore orchestra membership. Both options keep team sizes even.
 6. Use **Fill unassigned** to allocate only unassigned people, or **Reshuffle unlocked** to recalculate automated allocations without changing manually locked people. Switching assignment style does not move anyone until you fill or reshuffle.
-7. Export assigned teams to a UTF-8 CSV file.
+7. Click **Download Excel** for a `spritorienteering-teams.xlsx` file with one team per column, a detailed assignments sheet, and an **Unassigned** sheet when needed. Custom team names and orchestra membership are included. The original **Download CSV** option remains available.
 
 The team capacities are balanced (sizes differ by at most one) and the default assignment style attempts to spread each orchestra across teams evenly. The fully random style ignores orchestra membership. If a team count or inclusion change makes a team overfull, some assignments may be cleared, prioritizing preservation of manual choices. No data is uploaded to a server; processing happens in the browser, and edits are not saved across refreshes.
 
 ## Files
 
 - `src/App.jsx` — interface and app behavior
-- `src/lib/assignments.js` — import, roster, team distribution, CSV export
+- `src/lib/assignments.js` — import, roster, team distribution, CSV and Excel sheet data
 - `src/App.css` / `src/index.css` — styling
 - `test/team-utils.test.js` — logic tests

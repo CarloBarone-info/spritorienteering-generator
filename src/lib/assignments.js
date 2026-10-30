@@ -267,3 +267,77 @@ export function rowsToCsv(rows) {
     return /[",\r\n]/.test(value) ? '"' + value.replace(/"/g, '""') + '"' : value
   }).join(',')).join('\r\n')
 }
+
+
+// Shape expected by write-excel-file v4: separate sheet data and sheet options.
+// Kept separate from the download library so the output can be unit-tested.
+export function teamWorkbookSheets(participants, teamNames) {
+  const teams = teamNames.map((name, index) => ({
+    name: String(name || '').trim() || 'Team ' + (index + 1),
+    members: participants.filter((person) =>
+      person.included && person.teamIndex === index
+    ),
+  }))
+  const unassigned = participants.filter((person) =>
+    person.included && person.teamIndex === null
+  )
+  const header = (value) => ({
+    value,
+    fontWeight: 'bold',
+    backgroundColor: '#17543F',
+    textColor: '#FFFFFF',
+  })
+  const subtitle = (value) => ({
+    value,
+    fontWeight: 'bold',
+    backgroundColor: '#EAF3E9',
+    textColor: '#376F50',
+  })
+  const maxTeamSize = Math.max(0, ...teams.map((team) => team.members.length))
+  const teamsSheet = [
+    teams.map((team) => header(team.name)),
+    teams.map((team) => subtitle(team.members.length + ' participants')),
+    ...Array.from({ length: maxTeamSize }, (_, row) =>
+      teams.map((team) => {
+        const person = team.members[row]
+        return person ? person.name + ' (' + person.orchestra + ')' : null
+      }),
+    ),
+  ]
+  const details = [[header('Team'), header('Participant'), header('Orchestra')]]
+  for (const team of teams) {
+    for (const person of team.members) {
+      details.push([team.name, person.name, person.orchestra])
+    }
+  }
+  const sheets = [
+    {
+      sheet: 'Teams',
+      data: teamsSheet,
+      columns: teams.map(() => ({ width: 34 })),
+      stickyRowsCount: 2,
+      orientation: 'landscape',
+      showGridLines: false,
+    },
+    {
+      sheet: 'Detailed assignments',
+      data: details,
+      columns: [{ width: 26 }, { width: 28 }, { width: 28 }],
+      stickyRowsCount: 1,
+      showGridLines: false,
+    },
+  ]
+  if (unassigned.length) {
+    sheets.push({
+      sheet: 'Unassigned',
+      data: [
+        [header('Participant'), header('Orchestra')],
+        ...unassigned.map((person) => [person.name, person.orchestra]),
+      ],
+      columns: [{ width: 28 }, { width: 28 }],
+      stickyRowsCount: 1,
+      showGridLines: false,
+    })
+  }
+  return sheets
+}

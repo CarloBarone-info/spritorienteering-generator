@@ -240,7 +240,9 @@ input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible
 .action-row button:disabled { opacity: .38; cursor: not-allowed; }
 .button-primary { background: #216e4e; border: 1px solid #216e4e; color: #fff; }
 .button-primary:not(:disabled):hover { background: #15543b; }
-.button-secondary, .button-export { background: #eff6ef; color: #2a6a47; border: 1px solid #d3e5d6; }
+.button-secondary { background: #eff6ef; color: #2a6a47; border: 1px solid #d3e5d6; }
+.button-export { background: #216e4e; color: #fff; border: 1px solid #216e4e; }
+.button-export:not(:disabled):hover { background: #15543b; }
 .button-quiet { background: #fff; color: #677e6c; border: 1px solid #e0e8df; }
 
 .distribution-settings {

@@ -10,6 +10,7 @@ import {
   makeTeamNames,
   exportRows,
   rowsToCsv,
+  teamWorkbookSheets,
 } from './lib/assignments.js'
 import './App.css'
 
@@ -49,6 +50,7 @@ function App() {
   const [sizeDraft, setSizeDraft] = useState(null)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
+  const [exportingExcel, setExportingExcel] = useState(false)
 
   const total = participants.filter((person) => person.included).length
   const assigned = participants.filter((person) => person.included && person.teamIndex !== null).length
@@ -169,6 +171,23 @@ function App() {
     })))
     setNotice('All assignments cleared.')
     setError('')
+  }
+
+  async function downloadExcel() {
+    if (!assigned || exportingExcel) return
+    setExportingExcel(true)
+    setError('')
+    try {
+      // Load the Excel writer only when needed to keep the initial app lightweight.
+      const { default: writeExcelFile } = await import('write-excel-file/browser')
+      const sheets = teamWorkbookSheets(participants, teamNames)
+      await writeExcelFile(sheets).toFile('spritorienteering-teams.xlsx')
+      setNotice('Downloaded ' + assigned + ' assigned participants as an Excel file.')
+    } catch (err) {
+      setError(err instanceof Error ? 'Could not download Excel: ' + err.message : 'Could not download Excel.')
+    } finally {
+      setExportingExcel(false)
+    }
   }
 
   function exportCsv() {
@@ -316,8 +335,10 @@ function App() {
                 onClick={() => fillRemaining(true)}>Reshuffle unlocked</button>
               <button className="button-quiet" type="button" disabled={!assigned}
                 onClick={clearAssignments}>Clear all</button>
-              <button className="button-export" type="button" disabled={!assigned}
-                onClick={exportCsv}>Export CSV ↗</button>
+              <button className="button-export" type="button" disabled={!assigned || exportingExcel}
+                onClick={downloadExcel}>{exportingExcel ? 'Preparing Excel…' : 'Download Excel ↓'}</button>
+              <button className="button-secondary" type="button" disabled={!assigned}
+                onClick={exportCsv}>Download CSV ↓</button>
             </div>
           </div>
 

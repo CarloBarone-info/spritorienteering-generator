@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import {
   parseDelimited, rosterFromRows, capacityFor, reconcileAssignments,
-  assignRandomly, setIncludedTotal, rowsToCsv, exportRows,
+  assignRandomly, setIncludedTotal, rowsToCsv, exportRows, teamWorkbookSheets,
 } from '../src/lib/assignments.js'
 
 const csv = 'Orchestra 1,Orchestra 2,Orchestra 3,Orchestra 4,Orchestra 5\n' +
@@ -110,3 +110,38 @@ test('fully random mode respects manual locks during fill and reshuffle', () => 
   )
 })
 
+
+
+test('Excel workbook organizes teams in columns and preserves custom names', () => {
+  const { participants } = rosterFromRows(parseDelimited(csv))
+  participants[0].teamIndex = 0
+  participants[1].teamIndex = 1
+  participants[2].teamIndex = 0
+  const sheets = teamWorkbookSheets(participants, ['Brass Brigade', 'Woodwinds'])
+  assert.deepEqual(sheets.map((sheet) => sheet.sheet), ['Teams', 'Detailed assignments', 'Unassigned'])
+  assert.equal(sheets[0].data[0][0].value, 'Brass Brigade')
+  assert.equal(sheets[0].data[0][1].value, 'Woodwinds')
+  assert.equal(sheets[0].data[2][0], 'Ada (Orchestra 1)')
+  assert.equal(sheets[0].data[2][1], 'Alex (Orchestra 1)')
+  assert.deepEqual(sheets[1].data[1], ['Brass Brigade', 'Ada', 'Orchestra 1'])
+  assert.equal(sheets[2].data.length, 8)
+})
+
+test('Excel workbook leaves out unassigned sheet if everyone is assigned', () => {
+  const { participants } = rosterFromRows(parseDelimited(csv))
+  const assigned = assignRandomly(participants, 2, false, () => 0.5)
+  const sheets = teamWorkbookSheets(assigned, ['Team A', 'Team B'])
+  assert.deepEqual(sheets.map((sheet) => sheet.sheet), ['Teams', 'Detailed assignments'])
+  assert.equal(sheets[1].data.length, 11)
+})
+
+test('Excel workbook omits excluded people and includes empty teams', () => {
+  const roster = rosterFromRows(parseDelimited(csv)).participants
+  roster[0].included = false
+  roster[1].teamIndex = 0
+  const sheets = teamWorkbookSheets(roster, ['Team 1', 'Unused'])
+  assert.equal(sheets[0].data[0][1].value, 'Unused')
+  assert.equal(sheets[0].data[1][1].value, '0 participants')
+  assert.equal(sheets[1].data.length, 2)
+  assert.equal(sheets[2].data.length, 9)
+})
